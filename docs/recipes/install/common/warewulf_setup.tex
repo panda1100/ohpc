@@ -4,6 +4,8 @@ configuration files in order to allow \Warewulf{} to work with \baseOS{} and to
 support local provisioning using a second private interface (refer to
 Figure~\ref{fig:physical_arch}).
 %\vspace*{-0.05cm}
+\iftoggleverb{isWarewulf}
+% Warewulf v3
 \begin{center}
 \begin{tcolorbox}[]
 \small
@@ -13,3 +15,6 @@ this setting to override with a potentially alternatively-named interface specif
 \texttt{\$\{sms\_eth\_internal\}}.
 \end{tcolorbox}
 \end{center}
+\else
+% Warewulf v4
+\fi

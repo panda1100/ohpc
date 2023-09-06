@@ -2,6 +2,33 @@
 % ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
 
+\iftoggleverb{isWarewulf4}
+% Warewulf v4
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Replace “ipaddr: 192.168.200.1” with the IP address of the cluster interface
+[sms](*\#*) perl -pi -e "s/ipaddr: 192.168.200.1/ibaddr: ${sms_ip}/" /etc/warewulf/warewulf.conf
+
+# Update the netmask field, if needed
+[sms](*\#*) perl -pi -e "s/netmask: 255.255.255.0/netmask: ${sms_netmask}/" /etc/warewulf/warewulf.conf
+
+# Update the network field
+[sms](*\#*) perl -pi -e "s/network: 192.168.200.0/network: ${sms_network}/" /etc/warewulf/warewulf.conf
+
+# Update the DHCP ranges, if needed
+[sms](*\#*) perl -pi -e "s/range start: 192.168.200.50/range start: ${dhcp_range_start}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) perl -pi -e "s/range end: 192.168.200.99/range end: ${dhcp_range_end}/" /etc/warewulf/warewulf.conf
+
+# Change "mount" option for "/opt" to "true"
+[sms](*\#*) perl -pi -e "s/mount: false/mount: true/" /etc/warewulf/warewulf.conf
+
+# Enable and start Warewulf service
+[sms](*\#*) systemctl enable warewulfd --now
+
+# Implement all configuration changes
+[sms](*\#*) wwctl configure --all
+\end{lstlisting}
+\else
+% Warewulf v3
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface
 [sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
@@ -17,5 +44,6 @@
 [sms](*\#*) systemctl enable tftp.socket
 [sms](*\#*) systemctl start tftp.socket
 \end{lstlisting}
+\fi
 %\end{verbatim}
 % end_ohpc_run
